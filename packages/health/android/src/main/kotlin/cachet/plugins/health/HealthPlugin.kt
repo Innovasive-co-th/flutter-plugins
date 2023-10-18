@@ -954,6 +954,7 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 )
                         ),
                     "source_id" to dataPoint.originalDataSource.streamIdentifier,
+                    "model" to dataPoint.originalDataSource.device?.model
                 )
             }
             Handler(context!!.mainLooper).run { result.success(healthData) }
