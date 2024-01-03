@@ -12,17 +12,20 @@ class HealthDataPoint {
   String _deviceId;
   String _sourceId;
   String _sourceName;
+  String? _model;
 
   HealthDataPoint(
-      this._value,
-      this._type,
-      this._unit,
-      this._dateFrom,
-      this._dateTo,
-      this._platform,
-      this._deviceId,
-      this._sourceId,
-      this._sourceName) {
+    this._value,
+    this._type,
+    this._unit,
+    this._dateFrom,
+    this._dateTo,
+    this._platform,
+    this._deviceId,
+    this._sourceId,
+    this._sourceName,
+    this._model,
+  ) {
     // set the value to minutes rather than the category
     // returned by the native API
     if (type == HealthDataType.MINDFULNESS ||
@@ -60,19 +63,17 @@ class HealthDataPoint {
     }
 
     return HealthDataPoint(
-        healthValue,
-        HealthDataType.values
-            .firstWhere((element) => element.name == json['data_type']),
-        HealthDataUnit.values
-            .firstWhere((element) => element.name == json['unit']),
-        DateTime.parse(json['date_from']),
-        DateTime.parse(json['date_to']),
-        PlatformTypeJsonValue.keys.toList()[PlatformTypeJsonValue.values
-            .toList()
-            .indexOf(json['platform_type'])],
-        json['device_id'],
-        json['source_id'],
-        json['source_name']);
+      healthValue,
+      HealthDataType.values.firstWhere((element) => element.name == json['data_type']),
+      HealthDataUnit.values.firstWhere((element) => element.name == json['unit']),
+      DateTime.parse(json['date_from']),
+      DateTime.parse(json['date_to']),
+      PlatformTypeJsonValue.keys.toList()[PlatformTypeJsonValue.values.toList().indexOf(json['platform_type'])],
+      json['device_id'],
+      json['source_id'],
+      json['source_name'],
+      json['model'],
+    );
   }
 
   /// Converts the [HealthDataPoint] to a json object
@@ -85,7 +86,8 @@ class HealthDataPoint {
         'platform_type': PlatformTypeJsonValue[platform],
         'device_id': deviceId,
         'source_id': sourceId,
-        'source_name': sourceName
+        'source_name': sourceName,
+        'model': model,
       };
 
   @override
@@ -98,7 +100,8 @@ class HealthDataPoint {
     platform: $platform,
     deviceId: $deviceId,
     sourceId: $sourceId,
-    sourceName: $sourceName""";
+    sourceName: $sourceName,
+    model: $model""";
 
   /// The quantity value of the data point
   HealthValue get value => _value;
@@ -133,6 +136,9 @@ class HealthDataPoint {
   /// The name of the source from which the data point was fetched.
   String get sourceName => _sourceName;
 
+  /// The model of the source from which the data point was fetched.
+  String? get model => _model;
+
   @override
   bool operator ==(Object o) {
     return o is HealthDataPoint &&
@@ -144,10 +150,10 @@ class HealthDataPoint {
         this.platform == o.platform &&
         this.deviceId == o.deviceId &&
         this.sourceId == o.sourceId &&
-        this.sourceName == o.sourceName;
+        this.sourceName == o.sourceName &&
+        this.model == o.model;
   }
 
   @override
-  int get hashCode => Object.hash(value, unit, dateFrom, dateTo, type, platform,
-      deviceId, sourceId, sourceName);
+  int get hashCode => Object.hash(value, unit, dateFrom, dateTo, type, platform, deviceId, sourceId, sourceName, model);
 }
