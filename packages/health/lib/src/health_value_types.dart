@@ -156,7 +156,7 @@ class WorkoutHealthValue extends HealthValue {
             ? HealthDataUnit.values.firstWhere(
                 (element) => element.name == json['totalDistanceUnit'])
             : null,
-        json['heartRateSamples'] != null ? json['heartRateSamples'] : null);
+        json['heartRateSamples'] != null ? json['heartRateSamples'] : []);
   }
 
   @override
