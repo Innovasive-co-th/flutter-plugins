@@ -463,10 +463,7 @@ class HealthFactory {
         return compute(_parse, mesg);
       }
 
-      final data = _parse(mesg);
-      print('======== log ========');
-      print(data.map((e) => e.toString()));
-      return data;
+      return _parse(mesg);
     } else {
       return <HealthDataPoint>[];
     }
