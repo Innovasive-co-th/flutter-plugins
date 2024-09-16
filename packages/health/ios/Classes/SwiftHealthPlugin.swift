@@ -854,7 +854,9 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                         "recording_method": (sample.metadata?[HKMetadataKeyWasUserEntered] as? Bool == true)
                             ? RecordingMethod.manual.rawValue
                             : RecordingMethod.automatic.rawValue,
-                        "metadata": dataTypeKey == INSULIN_DELIVERY ? sample.metadata : nil
+                        "metadata": dataTypeKey == INSULIN_DELIVERY ? sample.metadata : nil,
+                        "model": sample.device?.model ?? "",
+                        "software_version": sample.device?.softwareVersion ?? "",
                     ]
                 }
                 DispatchQueue.main.async {
@@ -922,7 +924,9 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 
             case let (samplesWorkout as [HKWorkout]) as Any:
                 
+                let group = DispatchGroup()
                 let dictionaries = samplesWorkout.map { sample -> NSDictionary in
+                    group.enter()
                     return [
                         "uuid": "\(sample.uuid)",
                         "workoutActivityType": workoutActivityTypeMap.first(where: {
@@ -932,6 +936,9 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                         "totalEnergyBurnedUnit": "KILOCALORIE",
                         "totalDistance": sample.totalDistance?.doubleValue(for: HKUnit.meter()),
                         "totalDistanceUnit": "METER",
+                        "heartRateSamples": fetchHeartRatesFromWorkOut(sample, completion: {
+                            group.leave()
+                        }),
                         "date_from": Int(sample.startDate.timeIntervalSince1970 * 1000),
                         "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
                         "source_id": sample.sourceRevision.source.bundleIdentifier,
@@ -943,9 +950,9 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                     ]
                 }
                 
-                DispatchQueue.main.async {
-                    result(dictionaries)
-                }
+                group.notify(queue: .main, execute: {
+                        result(dictionaries)
+                })
                 
             case let (samplesAudiogram as [HKAudiogramSample]) as Any:
                 let dictionaries = samplesAudiogram.map { sample -> NSDictionary in
@@ -1062,6 +1069,46 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             "source_id": sample.sourceRevision.source.bundleIdentifier,
             "source_name": sample.sourceRevision.source.name,
         ]
+    }
+
+    private func fetchHeartRatesFromWorkOut(_ workout: HKWorkout, completion: @escaping () -> ()) -> [NSDictionary] {
+        let semaphore = DispatchSemaphore(value: 0)
+        var list = [NSDictionary]()
+        let predicate = HKQuery.predicateForObjects(from: workout)
+        let sampleType = HKSampleType.quantityType(forIdentifier: .heartRate)!
+
+        if #available(iOS 15.0, *) {
+            let descriptor = HKQueryDescriptor(sampleType: sampleType, predicate: predicate)
+            let query = HKSampleQuery(
+                queryDescriptors: [descriptor],
+                limit: HKObjectQueryNoLimit
+            ) {query, samplesOrNil, error in
+                guard let samples = samplesOrNil else {
+                    completion()
+                    semaphore.signal()
+                    return
+                }
+
+                for sample in samples {
+                    let quantitySample = sample as! HKQuantitySample
+                    list.append([
+                        "uuid": quantitySample.uuid.uuidString,
+                        "value": quantitySample.quantity.doubleValue(for: HKUnit.init(from: "count/min")),
+                        "date_from": Int(quantitySample.startDate.timeIntervalSince1970 * 1000),
+                        "date_to": Int(quantitySample.endDate.timeIntervalSince1970 * 1000),
+                        "source_id": quantitySample.sourceRevision.source.bundleIdentifier,
+                        "source_name": quantitySample.sourceRevision.source.name,
+                    ])
+                }
+
+                completion()
+                semaphore.signal()
+            }
+            HKHealthStore().execute(query)
+        }
+        
+        semaphore.wait()
+        return list
     }
     
     func getIntervalData(call: FlutterMethodCall, result: @escaping FlutterResult) {

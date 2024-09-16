@@ -55,6 +55,9 @@ class HealthDataPoint {
   /// The metadata for this data point.
   Map<String, dynamic>? metadata;
 
+  /// 
+  String? model;
+
   HealthDataPoint({
     required this.uuid,
     required this.value,
@@ -69,6 +72,7 @@ class HealthDataPoint {
     this.recordingMethod = RecordingMethod.unknown,
     this.workoutSummary,
     this.metadata,
+    this.model,
   }) {
     // set the value to minutes rather than the category
     // returned by the native API
@@ -180,7 +184,8 @@ class HealthDataPoint {
     sourceName: $sourceName
     recordingMethod: $recordingMethod
     workoutSummary: $workoutSummary
-    metadata: $metadata""";
+    metadata: $metadata
+    model: $model""";
 
   @override
   bool operator ==(Object other) =>
@@ -196,9 +201,10 @@ class HealthDataPoint {
       sourceId == other.sourceId &&
       sourceName == other.sourceName &&
       recordingMethod == other.recordingMethod &&
-      metadata == other.metadata;
+      metadata == other.metadata &&
+      model == other.model;
 
   @override
   int get hashCode => Object.hash(uuid, value, unit, dateFrom, dateTo, type,
-      sourcePlatform, sourceDeviceId, sourceId, sourceName, metadata);
+      sourcePlatform, sourceDeviceId, sourceId, sourceName, metadata, model);
 }

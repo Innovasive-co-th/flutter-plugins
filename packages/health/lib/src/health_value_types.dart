@@ -140,6 +140,10 @@ class WorkoutHealthValue extends HealthValue {
   /// Might not be available for all workouts.
   HealthDataUnit? totalStepsUnit;
 
+  ///
+  ///
+  List<Object?>? heartRateSamples;
+
   WorkoutHealthValue(
       {required this.workoutActivityType,
       this.totalEnergyBurned,
@@ -147,7 +151,8 @@ class WorkoutHealthValue extends HealthValue {
       this.totalDistance,
       this.totalDistanceUnit,
       this.totalSteps,
-      this.totalStepsUnit});
+      this.totalStepsUnit,
+      this.heartRateSamples});
 
   /// Create a [WorkoutHealthValue] based on a health data point from native data format.
   factory WorkoutHealthValue.fromHealthDataPoint(dynamic dataPoint) =>
@@ -176,6 +181,9 @@ class WorkoutHealthValue extends HealthValue {
           totalStepsUnit: dataPoint['totalStepsUnit'] != null
               ? HealthDataUnit.values.firstWhere(
                   (element) => element.name == dataPoint['totalStepsUnit'])
+              : null,
+          heartRateSamples: dataPoint['heartRateSamples'] != null
+              ? (dataPoint['heartRateSamples'] as List).toList()
               : null);
 
   @override
@@ -191,9 +199,10 @@ class WorkoutHealthValue extends HealthValue {
            totalEnergyBurned: $totalEnergyBurned,
            totalEnergyBurnedUnit: ${totalEnergyBurnedUnit?.name},
            totalDistance: $totalDistance,
-           totalDistanceUnit: ${totalDistanceUnit?.name}
+           totalDistanceUnit: ${totalDistanceUnit?.name},
            totalSteps: $totalSteps,
-           totalStepsUnit: ${totalStepsUnit?.name}""";
+           totalStepsUnit: ${totalStepsUnit?.name},
+           heartRateSamples: $heartRateSamples""";
 
   @override
   bool operator ==(Object other) =>
@@ -204,7 +213,8 @@ class WorkoutHealthValue extends HealthValue {
       totalDistance == other.totalDistance &&
       totalDistanceUnit == other.totalDistanceUnit &&
       totalSteps == other.totalSteps &&
-      totalStepsUnit == other.totalStepsUnit;
+      totalStepsUnit == other.totalStepsUnit &&
+      heartRateSamples == other.heartRateSamples;
 
   @override
   int get hashCode => Object.hash(
@@ -214,7 +224,8 @@ class WorkoutHealthValue extends HealthValue {
       totalDistance,
       totalDistanceUnit,
       totalSteps,
-      totalStepsUnit);
+      totalStepsUnit,
+      heartRateSamples);
 }
 
 /// A [HealthValue] object for ECGs
