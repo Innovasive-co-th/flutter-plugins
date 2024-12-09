@@ -55,6 +55,12 @@ class HealthDataPoint {
   /// The metadata for this data point.
   Map<String, dynamic>? metadata;
 
+  /// 
+  String? model;
+
+  ///
+  String? softwareVersion;
+
   HealthDataPoint({
     required this.uuid,
     required this.value,
@@ -69,6 +75,8 @@ class HealthDataPoint {
     this.recordingMethod = RecordingMethod.unknown,
     this.workoutSummary,
     this.metadata,
+    this.model,
+    this.softwareVersion,
   }) {
     // set the value to minutes rather than the category
     // returned by the native API
@@ -137,6 +145,8 @@ class HealthDataPoint {
         : Map<String, dynamic>.from(dataPoint['metadata'] as Map);
     final unit = dataTypeToUnit[dataType] ?? HealthDataUnit.UNKNOWN_UNIT;
     final String? uuid = dataPoint["uuid"] as String?;
+    final String? model = dataPoint["model"] as String?;
+    final String? softwareVersion = dataPoint["softwareVersion"] as String?;
 
     // Set WorkoutSummary, if available.
     WorkoutSummary? workoutSummary;
@@ -163,6 +173,8 @@ class HealthDataPoint {
       recordingMethod: RecordingMethod.fromInt(recordingMethod),
       workoutSummary: workoutSummary,
       metadata: metadata,
+      model: model,
+      softwareVersion: softwareVersion,
     );
   }
 
@@ -180,7 +192,9 @@ class HealthDataPoint {
     sourceName: $sourceName
     recordingMethod: $recordingMethod
     workoutSummary: $workoutSummary
-    metadata: $metadata""";
+    metadata: $metadata
+    model: $model
+    softwareVersion: $softwareVersion""";
 
   @override
   bool operator ==(Object other) =>
@@ -196,9 +210,10 @@ class HealthDataPoint {
       sourceId == other.sourceId &&
       sourceName == other.sourceName &&
       recordingMethod == other.recordingMethod &&
-      metadata == other.metadata;
+      metadata == other.metadata &&
+      model == other.model;
 
   @override
   int get hashCode => Object.hash(uuid, value, unit, dateFrom, dateTo, type,
-      sourcePlatform, sourceDeviceId, sourceId, sourceName, metadata);
+      sourcePlatform, sourceDeviceId, sourceId, sourceName, metadata, model);
 }

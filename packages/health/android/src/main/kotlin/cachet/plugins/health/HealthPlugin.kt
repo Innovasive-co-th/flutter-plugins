@@ -846,6 +846,7 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                     "date_to" to
                                             rec.endTime.toEpochMilli(),
                                     "source_id" to "",
+                                    "model" to record.metadata.device?.model,
                                     "source_name" to
                                             record.metadata
                                                 .dataOrigin
@@ -1013,6 +1014,7 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
     // TODO: Find alternative to SOURCE_ID or make it nullable?
     private fun convertRecord(record: Any, dataType: String): List<Map<String, Any?>> {
         val metadata = (record as Record).metadata
+        var model = metadata.device?.model ?: ""
         when (record) {
             is WeightRecord ->
                 return listOf(
@@ -1033,7 +1035,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1056,7 +1059,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1079,7 +1083,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1100,7 +1105,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1123,7 +1129,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1141,7 +1148,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     )
                 }
 
@@ -1163,7 +1171,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1186,7 +1195,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1209,7 +1219,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1238,7 +1249,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1261,7 +1273,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1284,7 +1297,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1307,7 +1321,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1330,7 +1345,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1353,7 +1369,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1376,7 +1393,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1402,7 +1420,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     ),
                 )
 
@@ -1424,7 +1443,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     )
                 )
 
@@ -1445,7 +1465,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     )
                 )
 
@@ -1466,7 +1487,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     )
                 )
 
@@ -1532,7 +1554,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     )
                 )
 
@@ -1548,7 +1571,8 @@ class HealthPlugin(private var channel: MethodChannel? = null) :
                                 metadata.dataOrigin
                                     .packageName,
                         "recording_method" to
-                                        metadata.recordingMethod
+                                        metadata.recordingMethod,
+                        "model" to model,
                     )
                 )
             // is ExerciseSessionRecord -> return listOf(mapOf<String, Any>("value" to ,

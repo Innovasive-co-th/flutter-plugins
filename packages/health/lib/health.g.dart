@@ -27,6 +27,8 @@ HealthDataPoint _$HealthDataPointFromJson(Map<String, dynamic> json) =>
           : WorkoutSummary.fromJson(
               json['workoutSummary'] as Map<String, dynamic>),
       metadata: json['metadata'] as Map<String, dynamic>?,
+      model: json['model'] as String?,
+      softwareVersion: json['softwareVersion'] as String?,
     );
 
 Map<String, dynamic> _$HealthDataPointToJson(HealthDataPoint instance) {
@@ -52,6 +54,8 @@ Map<String, dynamic> _$HealthDataPointToJson(HealthDataPoint instance) {
 
   writeNotNull('workoutSummary', instance.workoutSummary?.toJson());
   writeNotNull('metadata', instance.metadata);
+  writeNotNull('model', instance.model);
+  writeNotNull('softwareVersion', instance.softwareVersion);
   return val;
 }
 
@@ -298,6 +302,7 @@ WorkoutHealthValue _$WorkoutHealthValueFromJson(Map<String, dynamic> json) =>
       totalSteps: (json['totalSteps'] as num?)?.toInt(),
       totalStepsUnit:
           $enumDecodeNullable(_$HealthDataUnitEnumMap, json['totalStepsUnit']),
+      heartRateSamples: json['heartRateSamples'] as List<dynamic>?,
     )..$type = json['__type'] as String?;
 
 Map<String, dynamic> _$WorkoutHealthValueToJson(WorkoutHealthValue instance) {
@@ -321,6 +326,7 @@ Map<String, dynamic> _$WorkoutHealthValueToJson(WorkoutHealthValue instance) {
   writeNotNull('totalSteps', instance.totalSteps);
   writeNotNull(
       'totalStepsUnit', _$HealthDataUnitEnumMap[instance.totalStepsUnit]);
+  writeNotNull('heartRateSamples', instance.heartRateSamples);
   return val;
 }
 
